@@ -8,9 +8,13 @@ using namespace web::http::experimental::listener;
 #include <map>
 
 void handle_get(http_request request){
-    json::value answer;
-    answer["OK"] = json::value::string("YES");
-    request.reply(status_codes::OK,answer);
+	if (request.relative_uri().to_string() == "/answer")
+	{
+		json::value answer;
+		answer["OK"] = json::value::string("YES");
+		request.reply(status_codes::OK,answer);
+	}
+	request.reply(status_codes::OK, "Nothing special");
 }
 void handle_put(http_request request){
     std::cout<<"Handling put!\n";
@@ -23,7 +27,7 @@ void handle_del(http_request request){
 }
 
 int main() {
-    http_listener listener("https://localhost/restdemo");
+	http_listener listener("http://localhost:8080/restdemo");
     listener.support(methods::GET, handle_get);
     listener.support(methods::POST, handle_post);
     listener.support(methods::PUT, handle_put);
@@ -32,7 +36,7 @@ int main() {
     {
         listener
                 .open()
-                .then([&listener](){std::cout<<"Starting...";})
+				.then([&listener](){std::cout<<"Starting..."<<std::endl;})
                 .wait();
         while (true);
     }
