@@ -8,10 +8,10 @@ using namespace web::http::experimental::listener;
 #include <map>
 
 void handle_get(http_request request){
-	if (request.relative_uri().to_string() == "/answer")
+	if (request.relative_uri().to_string() == L"/answer")
 	{
 		json::value answer;
-		answer["OK"] = json::value::string("YES");
+		answer[L"OK"] = json::value::string(L"YES");
 		request.reply(status_codes::OK,answer);
 	}
 	request.reply(status_codes::OK, "Nothing special");
@@ -20,14 +20,14 @@ void handle_put(http_request request){
     std::cout<<"Handling put!\n";
 }
 void handle_post(http_request request){
-    std::cout<<"Handling psot!\n";
+    std::cout<<"Handling post!\n";
 }
 void handle_del(http_request request){
     std::cout<<"Handling delete!\n";
 }
 
 int main() {
-	http_listener listener("http://localhost:8080/restdemo");
+    http_listener listener(L"http://localhost:8080/restdemo");
     listener.support(methods::GET, handle_get);
     listener.support(methods::POST, handle_post);
     listener.support(methods::PUT, handle_put);
